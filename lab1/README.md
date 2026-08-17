@@ -45,5 +45,42 @@ cron (a cada 5 min) -> sentinela.sh -> curl no site -> grava em sentinela.log
 - Substituir o log em texto por Prometheus + Grafana (Lab 6)
 
 ---
+
+Algumas coisas que aconteceu na prática.
+
+
+- **VM em UTC, não em horário local**: é o padrão de servidor. Quando o
+  log de várias máquinas precisa ser cruzado, fuso único elimina conversão
+  mental e a ambiguidade do horário de verão. O custo é converter na
+  leitura — troca consciente.
+
+- **`chrony` em vez de acerto manual**: a VM roda suspensa entre sessões,
+  e ao retomar o relógio volta atrasado. O `chrony` corrige por *slewing*
+  (acelera o relógio de leve até alcançar) e **evita dar salto**, porque
+  relógio que pula para trás quebra banco de dados, cron e certificado.
+  A janela de salto só existe nas primeiras sincronizações após iniciar —
+  então, depois de retomar a VM: `sudo systemctl restart chrony`.
+
+- Site no ar: registra `200 | OK`
+- Domínio inexistente: registra `000 | FALHA`
+- **VM suspensa por dois dias**: o log não registra nada no período.
+  A lacuna entre `14/08 13:00` e `16/08 23:40` é a evidência de que o
+  monitor esteve fora do ar.
+
+## O que o log ensinou
+
+O log tem um buraco de dois dias — o tempo em que a VM ficou suspensa.
+Isso expõe um limite que todo monitoramento tem:
+
+> **um monitor não distingue "o serviço estava no ar" de "ninguém perguntou".**
+
+Ausência de registro parece silêncio bom, mas pode ser o monitor caído.
+Por isso monitoramento sério alerta também sobre a **falta de dados**, e
+não só sobre falha — é o que o CloudWatch chama de `INSUFFICIENT_DATA`
+e o que se conhece como *dead man's switch*.
+
+No Lab 6 isso é resolvido de verdade, com Prometheus e Alertmanager.
+
 Ricardo Nogueira de Souza — em transicao para infraestrutura cloud
+
 LinkedIn: https://www.linkedin.com/in/ricardondesouza/
