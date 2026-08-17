@@ -11,7 +11,7 @@ LinkedIn: linkedin.com/in/ricardondesouza
 
 | # | Lab | Stack | Status |
 |---|-----|-------|--------|
-| 1 | VM Linux administrada por CLI + scripts | Linux, Bash, cron, Git | 🔜 |
+| 1 | VM Linux administrada por CLI + scripts | Linux, Bash, cron, Git | ✅ |
 | 2 | App em VM AWS com dashboard e alarme | EC2, S3, CloudWatch | 🔜 |
 | 3 | Mesma app na AWS e na OCI (de-para) | AWS, OCI, VCN, Compute | 🔜 |
 | 4 | Stack conteinerizada + automação | Docker, Shell | 🔜 |
